@@ -1,6 +1,12 @@
 {
-  "workspaceName": "Audit Log API",
-  "domain": "audit",
-  "collections": "postman/collections",
-  "environments": "postman/environments"
+  "workspace": {
+    "id": "2d9dd88f-2c2d-4723-8fb9-ee20194f34eb"
+  },
+  "entities": {
+    "collections": [],
+    "environments": [],
+    "specs": [],
+    "flows": [],
+    "globals": []
+  }
 }
