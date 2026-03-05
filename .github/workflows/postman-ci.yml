@@ -22,17 +22,10 @@ jobs:
       - name: Install Newman
         run: npm install -g newman newman-reporter-htmlextra
 
-      - name: Run collection
-        env:
-          BASE_URL: ${{ secrets.AUDIT_API_BASE_URL }}
-          ACCESS_TOKEN: ${{ secrets.AUDIT_TEST_TOKEN }}
-          STREAM_ID: ${{ secrets.AUDIT_TEST_STREAM_ID }}
+      - name: Run collection against Postman Cloud Mock
         run: |
           newman run "postman/collections/Audit Log API.postman_collection.json" \
             --environment "postman/environments/production.postman_environment.json" \
-            --env-var "baseUrl=${BASE_URL}" \
-            --env-var "accessToken=${ACCESS_TOKEN}" \
-            --env-var "streamId=${STREAM_ID}" \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export reports/audit-log-api-results.html \
             --bail
