@@ -1,0 +1,241 @@
+openapi: 3.1.0
+info:
+  title: Audit Log API
+  version: "1.0.3"
+  description: Immutable event trail for compliance and security auditing across all Acme services.
+  contact:
+    name: Platform Security Team
+    email: platform-security@acme.io
+    url: https://wiki.acme.io/teams/platform-security
+
+servers:
+  - url: https://api.acme.io/audit/v1
+    description: Production
+  - url: https://dev-api.acme.io/audit/v1
+    description: Development
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: events
+    description: Audit event retrieval
+  - name: streams
+    description: Real-time event streaming
+  - name: exports
+    description: Bulk export operations
+
+paths:
+  /events:
+    get:
+      operationId: listEvents
+      summary: List audit events with filtering and pagination
+      tags: [events]
+      parameters:
+        - name: service
+          in: query
+          description: Filter by originating service
+          schema:
+            type: string
+            enum: [identity, billing, notifications, audit]
+        - name: actorId
+          in: query
+          description: Filter by actor (user or service account)
+          schema:
+            type: string
+        - name: action
+          in: query
+          description: Filter by action type (e.g. user.login, subscription.cancelled)
+          schema:
+            type: string
+        - name: from
+          in: query
+          description: Start of time range (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: End of time range (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 500
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Paginated list of audit events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventList"
+
+  /events/{eventId}:
+    get:
+      operationId: getEvent
+      summary: Retrieve a single audit event by ID
+      tags: [events]
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Audit event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "404":
+          description: Event not found
+
+  /events/export:
+    post:
+      operationId: exportEvents
+      summary: Queue a bulk export of audit events (async)
+      tags: [exports]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [from, to]
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                to:
+                  type: string
+                  format: date-time
+                service:
+                  type: string
+                format:
+                  type: string
+                  enum: [csv, ndjson]
+                  default: csv
+                deliveryEmail:
+                  type: string
+                  format: email
+      responses:
+        "202":
+          description: Export queued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exportId:
+                    type: string
+                  estimatedReadyAt:
+                    type: string
+                    format: date-time
+
+  /streams/{streamId}:
+    get:
+      operationId: getStream
+      summary: Get metadata for a real-time event stream
+      tags: [streams]
+      parameters:
+        - name: streamId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Stream metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stream"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        service:
+          type: string
+          enum: [identity, billing, notifications, audit]
+        action:
+          type: string
+          example: user.login
+        actorId:
+          type: string
+        actorType:
+          type: string
+          enum: [user, service_account, system]
+        targetId:
+          type: string
+        targetType:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+        ipAddress:
+          type: string
+        userAgent:
+          type: string
+        occurredAt:
+          type: string
+          format: date-time
+
+    EventList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        nextCursor:
+          type: string
+        total:
+          type: integer
+
+    Stream:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [active, paused, error]
+        destination:
+          type: string
+          description: Webhook URL or S3 bucket ARN
+        filters:
+          type: object
+          properties:
+            services:
+              type: array
+              items:
+                type: string
+            actions:
+              type: array
+              items:
+                type: string
+        createdAt:
+          type: string
+          format: date-time

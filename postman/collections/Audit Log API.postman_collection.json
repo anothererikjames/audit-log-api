@@ -1,0 +1,203 @@
+{
+  "info": {
+    "name": "Audit Log API",
+    "description": "Immutable event trail for compliance and security auditing. All reads are append-only — no delete endpoints exist by design.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "List Events",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Returns data array\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.be.an('array');",
+                  "});",
+                  "pm.test(\"Events have required fields\", () => {",
+                  "  const events = pm.response.json().data;",
+                  "  if (events.length > 0) {",
+                  "    const e = events[0];",
+                  "    pm.expect(e).to.include.all.keys('id', 'service', 'action', 'actorId', 'occurredAt');",
+                  "    pm.environment.set('eventId', e.id);",
+                  "  }",
+                  "});",
+                  "pm.test(\"Response time < 800ms\", () => pm.expect(pm.response.responseTime).to.be.below(800));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/events?service=identity&limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["events"],
+              "query": [
+                { "key": "service", "value": "identity" },
+                { "key": "limit", "value": "50" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Event by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Event ID matches\", () => {",
+                  "  pm.expect(pm.response.json().id).to.equal(pm.environment.get('eventId'));",
+                  "});",
+                  "pm.test(\"Has actor info\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.actorId).to.be.a('string');",
+                  "  pm.expect(body.actorType).to.be.oneOf(['user', 'service_account', 'system']);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "{{eventId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Events - Billing Service",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"All events are from billing\", () => {",
+                  "  const events = pm.response.json().data;",
+                  "  events.forEach(e => pm.expect(e.service).to.equal('billing'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/events?service=billing&action=subscription.cancelled&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["events"],
+              "query": [
+                { "key": "service", "value": "billing" },
+                { "key": "action", "value": "subscription.cancelled" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exports",
+      "item": [
+        {
+          "name": "Export Events (CSV)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"Returns exportId\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.exportId).to.be.a('string');",
+                  "  pm.expect(body.estimatedReadyAt).to.be.a('string');",
+                  "  pm.environment.set('exportId', body.exportId);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"from\": \"2024-10-01T00:00:00Z\",\n  \"to\": \"2024-10-31T23:59:59Z\",\n  \"service\": \"identity\",\n  \"format\": \"csv\",\n  \"deliveryEmail\": \"{{testEmail}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/events/export",
+              "host": ["{{baseUrl}}"],
+              "path": ["events", "export"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Streams",
+      "item": [
+        {
+          "name": "Get Stream",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Stream is active\", () => {",
+                  "  pm.expect(pm.response.json().status).to.equal('active');",
+                  "});",
+                  "pm.test(\"Has destination\", () => {",
+                  "  pm.expect(pm.response.json().destination).to.be.a('string');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{accessToken}}" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/streams/{{streamId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["streams", "{{streamId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.acme.io/audit/v1" }
+  ]
+}
