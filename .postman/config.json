@@ -1,0 +1,6 @@
+{
+  "workspaceName": "audit-log-api",
+  "domain": "audit",
+  "collections": "postman/collections",
+  "environments": "postman/environments"
+}
