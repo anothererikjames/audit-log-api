@@ -1,6 +1,17 @@
 {
-  "workspaceName": "audit-log-api",
-  "domain": "audit",
-  "collections": "postman/collections",
-  "environments": "postman/environments"
+  "workspace": {
+    "id": "7cc7c5e3-f3d5-4a15-b9bd-b44b0263c927"
+  },
+  "entities": {
+    "collections": [
+      "../postman/collections/Audit Log API — Demo_52238111-4f99a5bf-bf8d-4f2f-8336-76b1144b0da9.postman_collection.json"
+    ],
+    "environments": [
+      "../postman/environments/Audit Log API — Development_52238111-b39bd7f5-c64c-471b-8246-d4cde6030031.postman_environment.json",
+      "../postman/environments/Audit Log API — Production_52238111-066619a3-0bbe-43fb-8f9e-a8f838560813.postman_environment.json"
+    ],
+    "specs": [],
+    "flows": [],
+    "globals": []
+  }
 }
