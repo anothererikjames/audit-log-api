@@ -1,0 +1,409 @@
+{
+  "info": {
+    "_postman_id": "4f99a5bf-bf8d-4f2f-8336-76b1144b0da9",
+    "name": "Audit Log API — Demo",
+    "description": "Demo collection for audit service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST /auth/login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "8253fa51-7397-4f6a-9aa1-3920c1060b36",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /auth/refresh",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "0cf5b30d-0847-4292-9575-fed0cb8e2231",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/refresh",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "refresh"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "d1cca202-3d23-4e29-aed3-f5fe6658ff9c",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "64288f60-c95b-4b79-990c-3144033ee940",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /users/:id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "ad4194c0-48fd-4c0c-963f-5bcb7a3b5def",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT /users/:id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "0ead9e1e-7fdd-4840-a288-8f37dc83979c",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE /users/:id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "972073e6-4a7a-4188-9093-1313737f17a8",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /roles",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 2xx\", () => {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+              "});",
+              "pm.test(\"Response time < 500ms\", () => {",
+              "  pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "pm.test(\"Response has valid JSON\", () => {",
+              "  pm.response.to.have.header(\"content-type\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "e605b50b-61ab-4aa5-9287-3327bbd54607",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/roles",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "roles"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.example.com/v1"
+    },
+    {
+      "key": "authToken",
+      "value": ""
+    }
+  ]
+}
