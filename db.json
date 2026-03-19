@@ -1,0 +1,44 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "name": "Test events 1",
+      "status": "active",
+      "createdAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Test events 2",
+      "status": "active",
+      "createdAt": "2026-01-02T00:00:00Z"
+    }
+  ],
+  "exports": [
+    {
+      "id": 1,
+      "name": "Test exports 1",
+      "status": "active",
+      "createdAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Test exports 2",
+      "status": "active",
+      "createdAt": "2026-01-02T00:00:00Z"
+    }
+  ],
+  "retention-policies": [
+    {
+      "id": 1,
+      "name": "Test retention-policies 1",
+      "status": "active",
+      "createdAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Test retention-policies 2",
+      "status": "active",
+      "createdAt": "2026-01-02T00:00:00Z"
+    }
+  ]
+}
